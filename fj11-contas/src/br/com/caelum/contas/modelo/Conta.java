@@ -11,13 +11,17 @@ public abstract class Conta {
 	private int numero;
 	private String agencia;
 
-	public void saca(double valor) {
+	public void saca(double valor) throws SaldoInsuficienteException {
 		this.saldo -= valor;
 	}
 
 	/** */
 	public void deposita(double valor) {
-		this.saldo += valor;
+		if (valor < 0) {
+			throw new IllegalArgumentException("Você tentou depositar um valor negativo");
+		} else {
+			this.saldo += valor;
+		}
 	}
 
 	public double calculaRendimento() {
@@ -27,7 +31,12 @@ public abstract class Conta {
 	abstract public String getTipo();
 
 	public void transfere(double valor, Conta conta) {
-		this.saca(valor);
+		try {
+			this.saca(valor);
+		} catch (SaldoInsuficienteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		conta.deposita(valor);
 	}
 
@@ -67,9 +76,9 @@ public abstract class Conta {
 	public String getTitular() {
 		return titular;
 	}
-//	@Override
-//	public String toString() {
-//		// TODO Auto-generated method stub
-//		return "Titular: " + this.titular + " Agencia: " + this.agencia + "Tipo da Conta: " + this.getTipo();
-//	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Titular: " + this.titular + " Agencia: " + this.agencia + "Tipo da Conta: " + this.getTipo();
+	}
 }
