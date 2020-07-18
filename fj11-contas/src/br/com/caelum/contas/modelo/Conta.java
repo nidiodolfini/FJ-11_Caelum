@@ -5,14 +5,49 @@
 
 package br.com.caelum.contas.modelo;
 
-public abstract class Conta {
+public abstract class Conta implements Comparable<Conta> {
 	protected double saldo;
 	private String titular;
 	private int numero;
 	private String agencia;
+	
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((agencia == null) ? 0 : agencia.hashCode());
+		result = prime * result + numero;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Conta other = (Conta) obj;
+		if (agencia == null) {
+			if (other.agencia != null)
+				return false;
+		} else if (!agencia.equals(other.agencia))
+			return false;
+		if (numero != other.numero)
+			return false;
+		return true;
+	}
 
 	public void saca(double valor) throws SaldoInsuficienteException {
 		this.saldo -= valor;
+	}
+
+	public int compareTo(Conta outraConta) {
+		return this.titular.compareTo(outraConta.titular);
 	}
 
 	/** */
@@ -73,12 +108,42 @@ public abstract class Conta {
 		this.titular = titular;
 	}
 
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((agencia == null) ? 0 : agencia.hashCode());
+//		result = prime * result + numero;
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Conta other = (Conta) obj;
+//		if (agencia == null) {
+//			if (other.agencia != null)
+//				return false;
+//		} else if (!agencia.equals(other.agencia))
+//			return false;
+//		if (numero != other.numero)
+//			return false;
+//		return true;
+//	}
+
 	public String getTitular() {
 		return titular;
 	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Titular: " + this.titular + " Agencia: " + this.agencia + "Tipo da Conta: " + this.getTipo();
+		return "[titular=" + titular + ", numero=" + numero + ", agencia=" + agencia + "]";
+
 	}
 }
